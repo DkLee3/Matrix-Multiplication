@@ -40,17 +40,17 @@ void matrix_multiply_unoptimized(float *m1, float *m2, float *result) {
 
 
 /* 
-* 1. Do mat mul optimization with your code
+* Edit mat mul algorithm.
 */
 void matrix_multiply_optimized(float *m1, float *m2, float *result) {
 	long long start, end;
 	start = wall_clock_time();
-	// Main mat mul algorithm
+	// Main mat mul algorithm begin
 	for (int i = 0; i < SIZE; i++) 
 		for (int j = 0; j < SIZE; j++) 
 			for (int k = 0; k < SIZE; k++) 
 				result[i * SIZE + j] += m1[i * SIZE + k] * m2[k * SIZE + j];
-	//
+	// Main mat mul algorithm end
 	end = wall_clock_time();
 	fprintf(stderr, "Optimized Matrix multiplication took %1.2f seconds\n", ((float)(end - start))/1000000000);
 }
@@ -96,7 +96,7 @@ int main() {
 	zero_matrix(result_optimized);
 
 	// do matrix multiply
-	matrix_multiply_simd(m1, m2, result_optimized);
+	matrix_multiply_optimized(m1, m2, result_optimized);
 	matrix_multiply_unoptimized(m1, m2, result_unoptimized);
 
 	// print result
