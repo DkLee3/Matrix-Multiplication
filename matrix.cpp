@@ -55,20 +55,6 @@ void matrix_multiply_optimized(float *m1, float *m2, float *result) {
 	fprintf(stderr, "Optimized Matrix multiplication took %1.2f seconds\n", ((float)(end - start))/1000000000);
 }
 
-/* 
-* 2. Use your matrix_multiply_optimized.
-* 	 Edit here with your code.
-*/
-void matrix_multiply_simd(float *m1, float *m2, float *result) {
-	long long start, end;
-	start = wall_clock_time();
-	/*
-	* Paste optimized mat mul algorithm!!
-	*/
-	end = wall_clock_time();
-	fprintf(stderr, "SIMD Matrix multiplication took %1.2f seconds\n", ((float)(end - start))/1000000000);
-}
-
 void print_matrix(float *m) {
 	for (int i = 0; i < SIZE; i++) {
 		for (int j = 0; j < SIZE; j++) {
