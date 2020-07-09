@@ -1,4 +1,4 @@
-#define SIZE 4096
+#define SIZE 2048
 
 #include <iostream>
 #include <string>
@@ -85,20 +85,24 @@ void *matrix_multiply(void (*matrix_inf)) {
 
 	int start = ((matrix_info*)matrix_inf)->start_;
 	int end = ((matrix_info*)matrix_inf)->end_;
+	int i , j ,k;
 
-	 __m512 xmm2;
 	 __m512 xmm3 = _mm512_setzero_ps();
-	 for(int i = start; i< end; i++){
-	 	for(int j = 0; j < SIZE; j+=16){
-			for(int k = 0; k< SIZE; k++){
-				__m512 xmm0 = _mm512_set1_ps(m1[i*SIZE + k]);
-				__m512 xmm1 = _mm512_loadu_ps(&m2[k*SIZE + j]);
-				xmm2 = _mm512_mul_ps(xmm0, xmm1);
-				xmm3 = _mm512_add_ps(xmm3, xmm2);
+	 for(i = start; i< end; i++){
+		register int i_SIZE = i*SIZE;
+	 	for(k = 0; k < SIZE; k++){
+			register int k_SIZE = k*SIZE; 
+			__m512 xmm0 = _mm512_set1_ps(m1[i_SIZE + k]);
+			for(j = 0; j< SIZE; j+=16){
+				//__m512 xmm0 = _mm512_loadu_ps(m1[i_SIZE + k]);
+				__m512 xmm1 = _mm512_loadu_ps(&m2[k_SIZE + j]);
+				//xmm2 = _mm512_mul_ps(xmm0, xmm1);
+				xmm3 = _mm512_loadu_ps(&result[i_SIZE+j]);
+				xmm3 = _mm512_add_ps(xmm3, _mm512_mul_ps(xmm0, xmm1));
+				_mm512_storeu_ps(&result[i_SIZE + j], xmm3);
+				xmm3 = _mm512_setzero_ps();
 			}
-			_mm512_storeu_ps(&result[i*SIZE + j], xmm3);
-			xmm2 = _mm512_setzero_ps();
-			xmm3 = _mm512_setzero_ps();
+			//xmm2 = _mm512_setzero_ps();
 		}
 	}
 }
